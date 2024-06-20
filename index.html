@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1pc</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input[type="number"], button {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>1円PayPayCalc</h2>
+        <input type="number" id="paymentAmount" placeholder="支払い金額" min="1">
+        <button onclick="calculatePoints()">計算する</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculatePoints() {
+            const paymentAmount = parseInt(document.getElementById('paymentAmount').value);
+            if (isNaN(paymentAmount) || paymentAmount < 1) {
+                document.getElementById('result').innerText = '支払い金額を入力';
+                return;
+            }
+
+            let pointsUsed = 0;
+            let finalPayment = paymentAmount;
+
+            // ポイント利用額の計算
+            for (let i = Math.floor(paymentAmount / 1.5); i > 0; i--) {
+                let potentialPoints = i * 2;
+                let potentialPayment = paymentAmount - (potentialPoints * 1.5);
+                if (potentialPayment >= 1 && potentialPayment % 1 === 0) {
+                    pointsUsed = potentialPoints;
+                    finalPayment = potentialPayment;
+                    break;
+                }
+            }
+
+            document.getElementById('result').innerText = `ポイント利用額: ${pointsUsed}円\nPayPay支払額: ${finalPayment}円`;
+        }
+    </script>
+</body>
+</html>
